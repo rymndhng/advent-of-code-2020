@@ -4,6 +4,10 @@ version = "0.1.0"
 authors = ["Raymond Huang <rayh@hey.com>"]
 edition = "2018"
 
+[[bin]]
+name = "001"
+path = "src/001.rs"
+
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
