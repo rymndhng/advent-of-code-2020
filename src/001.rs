@@ -5,7 +5,7 @@ use std::fs::File;
 use std::collections::VecDeque;
 
 fn main () -> io::Result<()> {
-    let file = File::open("src/001.input")?;
+    let file = File::open("input/001.txt")?;
     let reader = BufReader::new(file);
 
     let mut vector: VecDeque<i32> = VecDeque::new();

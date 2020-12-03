@@ -56,7 +56,7 @@ fn valid_policy_part2(p: &PasswordPolicy) -> bool {
 }
 
 fn main () -> std::io::Result<()> {
-    let file = File::open("src/002.input")?;
+    let file = File::open("input/002.txt")?;
     let reader = BufReader::new(file);
 
     let valid_passwords = reader.lines()
