@@ -24,7 +24,7 @@ fn main () -> io::Result<()> {
 
     let mut result:Vec<i32> = Vec::new();
 
-    'outer for &a in vector.iter() {
+    'outer: for &a in vector.iter() {
         for &b in vector.iter() {
             for &c in vector.iter() {
                 if a+b+c == 2020 {
