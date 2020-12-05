@@ -30,9 +30,8 @@ pub fn main () -> std::io::Result<()> {
     let mut p2 = passport_ids.iter();
     p2.next();
 
-    let (part2, _) = dbg!(p1.zip(p2).find(|(a,b)| *b - *a == 2).unwrap());
-
-    dbg!(part2+1);
+    let part2 = dbg!(p1.zip(p2).find(|(&a,&b)| b - a == 2).unwrap());
+    dbg!(part2.0 + 1);
 
     Ok(())
 }
@@ -40,34 +39,26 @@ pub fn main () -> std::io::Result<()> {
 fn parse_line(s: String) -> Result<BoardingPass,String> {
     let (row, col) = s.split_at(7);
 
-    let mut row_val = 0x0;
+    let row = row.chars()
+        .map(|c| match c {
+            'B' => 1,
+            'F' => 0,
+            _ => panic!("Unexpected input! {}", c)
+        })
+        .fold(0, |acc,x| (acc << 1) + x);
 
-    for c in row.chars() {
-        match c {
-            'B' => row_val = (row_val << 1) + 1,
-            'F' => row_val = row_val << 1,
-            _ => return Err(format!("Invalid char {}", c))
-        };
-    }
+    let col = col.chars()
+        .map(|c| match c {
+            'L' => 0,
+            'R' => 1,
+            _ => panic!("Unexpected input! {}", c)
+        }).fold(0, |acc,x| (acc << 1) + x);
 
-    let mut col_val = 0x0;
-    for c in col.chars() {
-        match c {
-            'L' => col_val = col_val << 1,
-            'R' => col_val = (col_val << 1) + 1,
-            _ => return Err(format!("Invalid char {}", c))
-        }
-    }
-
-    Ok(BoardingPass {
-        row: row_val,
-        col: col_val,
-        id: row_val * 8 + col_val
-    })
+    Ok(BoardingPass { row, col, id: row * 8 + col})
 }
 
 #[cfg(test)]
-mod test005 {
+mod tests {
     use super::*;
 
     #[test]
