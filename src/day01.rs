@@ -4,6 +4,7 @@ use std::fs::File;
 
 use std::collections::VecDeque;
 
+#[allow(dead_code)]
 fn main () -> io::Result<()> {
     let file = File::open("input/001.txt")?;
     let reader = BufReader::new(file);

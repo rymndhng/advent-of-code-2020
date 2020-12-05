@@ -41,6 +41,7 @@ fn parse_line(s: String) -> PasswordPolicy {
     }
 }
 
+#[allow(dead_code)]
 fn valid_policy_part1(p: &PasswordPolicy) -> bool {
     let count = p.password.chars().filter(|&c| c == p.c).count();
     (p.min as usize) <= count && count <= (p.max as usize)
@@ -55,6 +56,7 @@ fn valid_policy_part2(p: &PasswordPolicy) -> bool {
     contains_char_at(p.min - 1) ^ contains_char_at(p.max - 1)
 }
 
+#[allow(dead_code)]
 fn main () -> std::io::Result<()> {
     let file = File::open("input/002.txt")?;
     let reader = BufReader::new(file);

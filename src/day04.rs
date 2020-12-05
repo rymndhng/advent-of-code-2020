@@ -108,7 +108,8 @@ fn parse_line(s: String) -> Result<Passport, String> {
     }
 }
 
-fn main () -> std::io::Result<()> {
+#[allow(dead_code)]
+pub fn main () -> std::io::Result<()> {
     let file = File::open("input/004.next.txt")?;
     let reader = BufReader::new(file);
 

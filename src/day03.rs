@@ -36,6 +36,7 @@ fn count_trees(grid: &ForestGrid, slope: &Slope) -> u32 {
     count
 }
 
+#[allow(dead_code)]
 fn main () -> std::io::Result<()> {
     let file = File::open("input/003.txt")?;
     let reader = BufReader::new(file);

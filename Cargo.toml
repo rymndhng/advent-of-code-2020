@@ -3,23 +3,10 @@ name = "advent2020"
 version = "0.1.0"
 authors = ["Raymond Huang <rayh@hey.com>"]
 edition = "2018"
-default-run = "004"
 
 [[bin]]
-name = "001"
-path = "src/001.rs"
-
-[[bin]]
-name = "002"
-path = "src/002.rs"
-
-[[bin]]
-name = "003"
-path = "src/003.rs"
-
-[[bin]]
-name = "004"
-path = "src/004.rs"
+name = "main"
+path = "src/main.rs"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
