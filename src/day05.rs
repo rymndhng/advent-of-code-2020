@@ -10,6 +10,7 @@ struct BoardingPass {
     id: i32
 }
 
+#[allow(dead_code)]
 pub fn main () -> std::io::Result<()> {
     let file = File::open("input/005.txt")?;
     let reader = BufReader::new(file);
