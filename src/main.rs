@@ -8,7 +8,8 @@ mod day04;
 mod day05;
 mod day06;
 mod day07;
+mod day08;
 
 fn main() -> std::io::Result<()> {
-    day07::main()
+    day08::main()
 }
