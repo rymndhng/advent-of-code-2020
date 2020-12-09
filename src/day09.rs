@@ -1,3 +1,4 @@
+use std::cmp::Ordering;
 use std::collections::vec_deque::VecDeque;
 use std::fs::File;
 use std::io::prelude::*;
@@ -19,7 +20,23 @@ pub fn main() -> std::io::Result<()> {
         // dbg!(part_2_brute_force(&transmission, 127));
 
         dbg!(part_1(&transmission, 25));
-        dbg!(part_2_brute_force(&transmission, 1639024365));
+
+        // Notes on this section:
+        //
+        // deque is slower than brute force by 50%. I removed the deque and used
+        // slices, and it did not improve runtime. I believe the bottlenck is
+        // the repeated calls to iter().sum().
+        //
+        // Taking that into account, the running_sum solution is 200-600x faster.
+        time_it!("brute_force", {
+            dbg!(part_2_brute_force(&transmission, 1639024365));
+        });
+        time_it!("deque", {
+            dbg!(part_2_deque(&transmission, 1639024365));
+        });
+        time_it!("running_sum", {
+            dbg!(part_2_running_sum(&transmission, 1639024365));
+        });
     };
 
     Ok(())
@@ -45,7 +62,7 @@ fn is_data(preamble: &[u64], data: u64) -> bool {
     // dbg!(preamble, data);
     for a in preamble {
         for b in preamble {
-            pif a == b {
+            if a == b {
                 continue;
             }
             if data == (a + b) {
@@ -68,4 +85,51 @@ fn part_2_brute_force(input: &[u64], expected_sum: u64) -> Result<u64, &str> {
         }
     }
     return Err("failed to terminate");
+}
+
+fn part_2_deque(input: &[u64], expected_sum: u64) -> Result<u64, &str> {
+    let mut window = VecDeque::with_capacity(10);
+    let mut input = input.iter();
+    loop {
+        match expected_sum.cmp(&window.iter().sum()) {
+            Ordering::Equal => {
+                return Ok(window.iter().min().unwrap() + window.iter().max().unwrap());
+            },
+            Ordering::Less => {
+                window.pop_front();
+            },
+            Ordering::Greater => {
+                match input.next() {
+                    Some(n) => window.push_back(*n),
+                    None => return Err("no match")
+                };
+            }
+        }
+    }
+}
+
+fn part_2_running_sum(input: &[u64], expected_sum: u64) -> Result<u64, &str> {
+    let mut min = 0;
+    let mut max = 1;
+    let mut window_sum = input[0];
+    loop {
+        match expected_sum.cmp(&window_sum) {
+            Ordering::Equal => {
+                let window = &input[min..max];
+                return Ok(window.iter().min().unwrap() + window.iter().max().unwrap());
+            },
+            Ordering::Less => {
+                window_sum = window_sum - input[min];
+                min = min + 1;
+            },
+            Ordering::Greater => {
+                if max == input.len() {
+                    return Err("no match");
+                } else {
+                    window_sum = window_sum + input[max];
+                    max = max + 1;
+                }
+            }
+        }
+    }
 }

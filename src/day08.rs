@@ -1,9 +1,10 @@
+use std::str::FromStr;
 use std::collections::HashSet;
 use std::fs::File;
 use std::io::prelude::*;
 use std::io::BufReader;
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug,PartialEq)]
 enum Cmd {
     Nop(i32),
     Acc(i32),
@@ -17,7 +18,7 @@ pub fn main() -> std::io::Result<()> {
 
     let commands = reader
         .lines()
-        .map(|s| parse_line(&s.unwrap()))
+        .map(|s| s.unwrap().parse::<Cmd>().unwrap())
         .collect::<Vec<_>>();
 
     #[allow(unused_must_use)]
@@ -80,27 +81,31 @@ fn part_2(commands: &[Cmd]) -> Result<i32, &str> {
     return Err("Could not fix corrupted commands");
 }
 
-fn parse_line(s: &str) -> Cmd {
-    let (cmd, arg) = s.split_at(3);
+impl FromStr for Cmd {
+    type Err = &'static str;
 
-    let cmd = match cmd {
-        "nop" => Cmd::Nop,
-        "acc" => Cmd::Acc,
-        "jmp" => Cmd::Jmp,
-        _ => panic!("unexpected input! {}", cmd),
-    };
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        let (cmd, arg) = s.split_at(3);
 
-    let mut chars = arg.trim().chars();
+        let cmd = match cmd {
+            "nop" => Cmd::Nop,
+            "acc" => Cmd::Acc,
+            "jmp" => Cmd::Jmp,
+            _ => return Err("unknown command"),
+        };
 
-    let sign = match chars.next() {
-        Some('+') => 1,
-        Some('-') => -1,
-        _ => unreachable!(),
-    };
+        let mut chars = arg.trim().chars();
 
-    let arg = chars.collect::<String>().parse::<i32>().unwrap() * sign;
+        let sign = match chars.next() {
+            Some('+') => 1,
+            Some('-') => -1,
+            _ => return Err("unreachable!"),
+        };
 
-    cmd(arg)
+        let arg = chars.collect::<String>().parse::<i32>().unwrap() * sign;
+
+        Ok(cmd(arg))
+    }
 }
 
 #[cfg(test)]
@@ -109,7 +114,7 @@ mod tests {
 
     #[test]
     fn day8_parse_line() {
-        assert_eq!(Cmd::Nop(0), parse_line("nop +0"));
-        assert_eq!(Cmd::Acc(1), parse_line("acc +1"));
+        assert_eq!(Cmd::Nop(0), "nop +0".parse().unwrap());
+        assert_eq!(Cmd::Acc(1), "acc +1".parse().unwrap());
     }
 }

@@ -1,0 +1,100 @@
+* Advent of Code 2020
+
+* Rust Learning Journal
+
+** Day 1
+Just trying to grasp the fundamentals. Don't remember.
+** Day 2
+A lot of practise with Iterators, Pattern Matching and Strings
+** Day 3
+Used Structs to model a Slope.
+
+Enjoying the iterator API a lot, has a very high-level API such as map/filter/fold
+** Day 4
+This was a difficult one in a new language.
+
+Ran into a lot of trickiness with streaming parser. Two things threw me off:
+1. The Iterator terminates early if =scan= returns a =None=. The solution is to emit
+   =Some(None)= while buffering input.
+
+2. The =scan= held intermediate state at the end of input. The solution is to
+   chain an extra empty string at the end to force the accumulator to clear.
+
+Hand-parsing was tricky. In retrospect, I should have used a HashMap instead of
+trying to assign it to a struct to minimize boilerplate code. Another solution a
+coworker suggested is to look at the serde library. Looks neat!
+
+Another area I struggle with is deciding when it's ok to use =.unwrap()=. Lessons learned:
+- Use it when you know the input is known to be valid (i.e. regex matching)
+- Use unwrap when prototyping
+
+Adopted usage of unit tests. The API for test assertions is very small.
+
+
+** Day 5
+Learned to use some rust attributes, such as:
+
+- =#[allow(dead_code)]= :: To prevent compiler from warning if code is unused
+- =#[allow(unused_must_use)]= :: To prevent compiler for warning about unused return values. Neat!
+
+After coding this up, I noticed that my project setup executed all my tests
+multiple times for each binary. I opted to re-organize =main.rs= and =cargo.toml=
+use a single target.
+
+** Day 6
+Used HashSets & re-used stream parsing from
+
+I wrote tests! I miss data-literals & from Clojure. Rust has macros,
+but it's not built-in for all datatypes, such as HashSets. I created a =hashset!=
+in =utils.rs= for future usage.
+
+I also miss the REPL-driven development of Clojure. Writing tests is not my jam
+for quick and iterative exploration of solution space.
+** Day 7
+Using =dbg!= instead of hand-rolled println! statements. This was very liberating.
+
+Explored the HashMap API: Learned to use =.entry= and =.or_insert= to lazily create containers.
+
+Use =while let Some(..) === and =if let Some(..) === which is much more succint that
+matching on =None=.
+
+Using built-in dervies: =#[derive(Hash, Clone, Debug, Eq, PartialEq)]=. These are
+great for data-only structs.
+
+Found a discussion on stackoverflow that discussed how to declare function args
+that are most flexible & performant for using immutable Strings and collections.
+Use =&str= for strings use =[T]= for collections. This leads to more succinct code. [fn:1]
+
+** Day 8
+Used Enums containers as a datatype. I originally started with a =struct= but soon
+found that the code was more compact as an enum. Nice!
+
+Learned from coworker about FromStr. I will try that next time.
+
+** Day 9
+Used =windows= from the Iterable API in the solution.
+
+Added a =time_it!= macro from a blog [fn:2]. I used this to time several
+approaches at solution 2. The results reveal how fast rust is on my 2015 i7 mbp.
+
+#+begin_src text
+[src/day09.rs:32] part_2_brute_force(&transmission, 1639024365) = Ok(
+    219202240,
+)
+brute_force: 9.419876ms
+[src/day09.rs:35] part_2_deque(&transmission, 1639024365) = Ok(
+    219202240,
+)
+deque: 13.947694ms
+[src/day09.rs:38] part_2_running_sum(&transmission, 1639024365) = Ok(
+    219202240,
+)
+running_sum: 28.908µs
+#+end_src
+
+
+* Footnotes
+
+[fn:2] https://notes.iveselov.info/programming/time_it-a-case-study-in-rust-macros
+
+[fn:1] https://doc.rust-lang.org/1.30.0/book/2018-edition/ch15-02-deref.html
