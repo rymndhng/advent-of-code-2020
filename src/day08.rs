@@ -10,6 +10,7 @@ enum Cmd {
     Jmp(i32),
 }
 
+#[allow(dead_code)]
 pub fn main() -> std::io::Result<()> {
     let file = File::open("input/008.txt")?;
     let reader = BufReader::new(file);
