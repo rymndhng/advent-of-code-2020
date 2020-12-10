@@ -78,20 +78,27 @@ Added a =time_it!= macro from a blog [fn:2]. I used this to time several
 approaches at solution 2. The results reveal how fast rust is on my 2015 i7 mbp.
 
 #+begin_src text
-[src/day09.rs:32] part_2_brute_force(&transmission, 1639024365) = Ok(
-    219202240,
-)
 brute_force: 9.419876ms
-[src/day09.rs:35] part_2_deque(&transmission, 1639024365) = Ok(
-    219202240,
-)
 deque: 13.947694ms
-[src/day09.rs:38] part_2_running_sum(&transmission, 1639024365) = Ok(
-    219202240,
-)
 running_sum: 28.908µs
 #+end_src
 
+** Day 10
+Unique path counts today. I struggled a lot with a Vector-based implementation
+today. My algorithm panicked when I tried to set an index when the array did not
+grow big enough yet. This was addressed after I pre-allocated the vector.
+
+For storing state, I tested HashMap -> Vector -> fixed array of size 4.
+
+#+begin_src text
+part_2_hashmap: 353.42µs
+part_2_vec: 57.13µs
+part_2_sliding_window: 47.911µs
+part_2_sliding_window_usize: 57.946µs
+#+end_src
+
+I also checked to see if there was an impact at all with numeric integer coercions
+and tried using usize directly. Surprisingly, it ran slower. See =part_2_sliding_window_usize=
 
 * Footnotes
 
