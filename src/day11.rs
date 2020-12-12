@@ -52,9 +52,15 @@ pub fn main() -> std::io::Result<()> {
     println!("{}", part1_result);
     dbg!(&part1_result.filled_seats());
 
-    let part2_result = solve(&grid, part_2);
-    println!("{}", part2_result);
-    dbg!(&part2_result.filled_seats());
+    time_it!("imperative", {
+        let part2_result = solve(&grid, part_2);
+        dbg!(&part2_result.filled_seats());
+    });
+
+    time_it!("functional", {
+        let part2_streams_result = solve(&grid, part_2_streams);
+        dbg!(&part2_streams_result.filled_seats());
+    });
 
     Ok(())
 }
@@ -83,29 +89,18 @@ fn part_1(grid: &Grid) -> Grid {
     let mut new_grid = Vec::new();
 
     for (row_id, row) in grid.0.iter().enumerate() {
-        let mut new_row = Vec::new();
-        for (col_id, value) in row.iter().enumerate() {
-            let mut occupied_adjacent_seats = 0;
-            // println!("for index: {}, {}", row_id, col_id);
-            for (row_offset, col_offset) in VECTORS.iter() {
-                let adj_row_id = row_id as i32 - row_offset;
-                let adj_col_id = col_id as i32 - col_offset;
+        let new_row = row.iter().enumerate().map(|(col_id, value)| {
+            let occupied_seats = VECTORS.iter()
+                .map(|(x,y)| (row_id as i32 + x, col_id as i32 + y))
+                .filter(|&pos| grid.seat_at(pos).filter(|c| **c == '#').is_some())
+                .count();
 
-                // println!("checking index: {}, {}", adj_row_id, adj_col_id);
-                if let Some(a) = grid.seat_at((adj_row_id, adj_col_id)) {
-                    if *a == '#' {
-                        occupied_adjacent_seats = occupied_adjacent_seats + 1
-                    }
-                }
-            }
-
-            let next_value = match value {
-                'L' if occupied_adjacent_seats == 0 => '#',
-                '#' if occupied_adjacent_seats >= 4 => 'L',
+            match value {
+                'L' if occupied_seats == 0 => '#',
+                '#' if occupied_seats >= 4 => 'L',
                 a => a.clone(),
-            };
-            new_row.push(next_value);
-        }
+            }
+        }).collect();
         new_grid.push(new_row);
     }
 
@@ -157,6 +152,38 @@ fn part_2(grid: &Grid) -> Grid {
             };
             new_row.push(next_value);
         }
+        new_grid.push(new_row);
+    }
+
+    Grid(new_grid)
+}
+
+fn part_2_streams(grid: &Grid) -> Grid {
+    let mut new_grid = Vec::new();
+
+    for (row_id, row) in grid.0.iter().enumerate() {
+        let new_row = row.iter().enumerate().map(|(col_id, value)| {
+            let dim = (grid.0.len() as i32, row.len() as i32);
+            let occupied_adjacent_seats = VECTORS.iter()
+                .filter(|vector| {
+                    let pos = (row_id as i32, col_id as i32);
+                    let c = permute(&pos, vector, &dim).iter()
+                        .filter_map(|adj_pos| grid.seat_at(*adj_pos))
+                        .find(|&&c| c == '#' || c == 'L');
+
+                    match c {
+                        Some('#') => true,
+                        _ => false
+                    }
+                })
+                .count();
+
+            match value {
+                'L' if occupied_adjacent_seats == 0 => '#',
+                '#' if occupied_adjacent_seats >= 5 => 'L',
+                a => a.clone(),
+            }
+        }).collect();
         new_grid.push(new_row);
     }
 
