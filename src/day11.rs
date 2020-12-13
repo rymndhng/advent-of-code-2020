@@ -38,7 +38,7 @@ impl Grid {
     }
 }
 
-
+#[allow(dead_code)]
 pub fn main() -> std::io::Result<()> {
     let file = File::open("input/011.txt")?;
     let reader = BufReader::new(file);
