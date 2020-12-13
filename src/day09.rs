@@ -70,7 +70,7 @@ fn is_data(preamble: &[u64], data: u64) -> bool {
             }
         }
     }
-    return true;
+    true
 }
 
 fn part_2_brute_force(input: &[u64], expected_sum: u64) -> Result<u64, &str> {
@@ -84,7 +84,7 @@ fn part_2_brute_force(input: &[u64], expected_sum: u64) -> Result<u64, &str> {
             return Ok(window.iter().min().unwrap() + window.iter().max().unwrap());
         }
     }
-    return Err("failed to terminate");
+    Err("failed to terminate")
 }
 
 fn part_2_deque(input: &[u64], expected_sum: u64) -> Result<u64, &str> {
@@ -119,15 +119,15 @@ fn part_2_running_sum(input: &[u64], expected_sum: u64) -> Result<u64, &str> {
                 return Ok(window.iter().min().unwrap() + window.iter().max().unwrap());
             },
             Ordering::Less => {
-                window_sum = window_sum - input[min];
-                min = min + 1;
+                window_sum -= input[min];
+                min += 1;
             },
             Ordering::Greater => {
                 if max == input.len() {
                     return Err("no match");
                 } else {
-                    window_sum = window_sum + input[max];
-                    max = max + 1;
+                    window_sum += input[max];
+                    max += 1;
                 }
             }
         }

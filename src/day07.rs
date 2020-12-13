@@ -25,7 +25,7 @@ pub fn part_1(key: &str, entries: &HashMap<String, Vec<BagSpec>>) -> usize {
         for bag_spec in contains {
             let set = reverse_lookup
                 .entry(&bag_spec.name)
-                .or_insert(HashSet::new());
+                .or_insert_with(HashSet::new);
             set.insert(bag_name.clone());
         }
     }
@@ -52,7 +52,7 @@ pub fn part_2(key: &str, hsh: &HashMap<String, Vec<BagSpec>>) -> i32 {
     let contained = hsh.get(key).expect("should have had a value");
     let mut count = 1;
     for item in contained.iter() {
-        count = count + item.count * (part_2(&item.name, &hsh));
+        count += item.count * (part_2(&item.name, &hsh));
     }
     count
 }
@@ -91,7 +91,7 @@ pub fn parse_line(s: String) -> (String, Vec<BagSpec>) {
                 if count != 0 {
                     contains_bags.push(BagSpec {
                         name: name.clone() + "bags",
-                        count: count,
+                        count
                     });
                 }
                 count = 0;

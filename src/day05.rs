@@ -25,7 +25,7 @@ pub fn main () -> std::io::Result<()> {
     dbg!(part1);
 
     let mut passport_ids: Vec<i32> = passports.iter().map(|x| x.id).collect();
-    passport_ids.sort();
+    passport_ids.sort_unstable();
 
     let p1 = passport_ids.iter();
     let mut p2 = passport_ids.iter();

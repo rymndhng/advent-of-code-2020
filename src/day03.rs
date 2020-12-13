@@ -27,10 +27,10 @@ fn count_trees(grid: &ForestGrid, slope: &Slope) -> u32 {
         let rowlen = row.len();
 
         if Some(&true) == row.get(row_n * (slope.right as usize) % rowlen) {
-            count = count + 1
+            count += 1
         }
 
-        row_n = row_n + 1;
+        row_n += 1;
     }
 
     count
@@ -62,7 +62,7 @@ fn main () -> std::io::Result<()> {
             println!("{}", n);
             n
         })
-        .fold(1, |x,y| x*y);
+        .product::<u32>();
 
     println!("part 2: {}", result);
 

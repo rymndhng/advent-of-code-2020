@@ -25,7 +25,7 @@ impl Grid {
         for row in &self.0 {
             for c in row {
                 if *c == '#' {
-                    count = count + 1;
+                    count += 1;
                 }
             }
         }
@@ -98,7 +98,7 @@ fn part_1(grid: &Grid) -> Grid {
             match value {
                 'L' if occupied_seats == 0 => '#',
                 '#' if occupied_seats >= 4 => 'L',
-                a => a.clone(),
+                a => *a,
             }
         }).collect();
         new_grid.push(new_row);
@@ -136,7 +136,7 @@ fn part_2(grid: &Grid) -> Grid {
                     if let Some(a) = grid.seat_at(adj_pos) {
                         match *a {
                             '#' => {
-                                occupied_adjacent_seats = occupied_adjacent_seats + 1;
+                                occupied_adjacent_seats += 1;
                                 break;
                             },
                             'L' => break,
@@ -148,7 +148,7 @@ fn part_2(grid: &Grid) -> Grid {
             let next_value = match value {
                 'L' if occupied_adjacent_seats == 0 => '#',
                 '#' if occupied_adjacent_seats >= 5 => 'L',
-                a => a.clone(),
+                a => *a,
             };
             new_row.push(next_value);
         }
@@ -171,17 +171,14 @@ fn part_2_streams(grid: &Grid) -> Grid {
                         .filter_map(|adj_pos| grid.seat_at(*adj_pos))
                         .find(|&&c| c == '#' || c == 'L');
 
-                    match c {
-                        Some('#') => true,
-                        _ => false
-                    }
+                    matches!(c, Some('#'))
                 })
                 .count();
 
             match value {
                 'L' if occupied_adjacent_seats == 0 => '#',
                 '#' if occupied_adjacent_seats >= 5 => 'L',
-                a => a.clone(),
+                a => *a,
             }
         }).collect();
         new_grid.push(new_row);

@@ -22,18 +22,18 @@ pub fn main() -> std::io::Result<()> {
                 acc.push_str(&x);
                 acc.push('\n');
                 // dbg!(acc);
-                return Some(None);
+                Some(None)
             }
         }).collect::<Vec<_>>();
 
     let part1 = votes.iter()
-        .filter_map(|s| s.as_ref().map(parse_answer))
+        .filter_map(|s| s.as_ref().map(|s| parse_answer(s)))
         .fold(0, |acc, answers| acc + answers.len());
 
     dbg!(part1);
 
     let part2 = votes.iter()
-        .filter_map(|s| s.as_ref().map(parse_answer_2))
+        .filter_map(|s| s.as_ref().map(|s| parse_answer_2(s)))
         .fold(0, |acc, answers| {
             // dbg!(&answers);
             acc + answers.len()
@@ -44,7 +44,7 @@ pub fn main() -> std::io::Result<()> {
     Ok(())
 }
 
-fn parse_answer(s: &String) -> HashSet<char> {
+fn parse_answer(s: &str) -> HashSet<char> {
     let mut answers = HashSet::new();
 
     for c in s.chars() {
@@ -56,14 +56,14 @@ fn parse_answer(s: &String) -> HashSet<char> {
     answers
 }
 
-fn parse_answer_2(s: &String) -> HashSet<char> {
+fn parse_answer_2(s: &str) -> HashSet<char> {
     s.lines()
         .map(|x| parse_answer(&x.to_string()))
         .fold(None, |acc, b| match acc {
             None => Some(b),
             Some(a) => Some(a.intersection(&b).cloned().collect::<HashSet<char>>()),
         })
-        .unwrap_or(HashSet::default())
+        .unwrap_or_default()
 }
 
 #[cfg(test)]

@@ -11,22 +11,22 @@ pub fn main() -> std::io::Result<()> {
         .collect::<Vec<_>>();
 
     let t = cmds.get(0).and_then(|x| x.parse::<usize>().ok()).unwrap();
-    let schedules = cmds.get(1).and_then(|x| Some(x.split(',')))
+    let schedules = cmds.get(1).map(|x| x.split(','))
         .unwrap()
         .enumerate()
         .filter_map(|(i,s)| s.parse::<usize>().map(|s| (i,s)).ok())
         .collect::<Vec<_>>();
 
-    dbg!(&schedules);
+    // dbg!(&schedules);
     dbg!(part_1(t, &schedules.iter().map(|s| s.1).collect::<Vec<_>>()));
     // dbg!(part_2_naive(&schedules, 1));
-    let part_2 = dbg!(part_2_chinese_remainder_theory(&schedules));
+    dbg!(part_2_chinese_remainder_theory(&schedules));
     // let part_2 = 1068781;
-    for sched in schedules {
-        println!("\nExpected/Actual");
-        println!("{} % {} = {}", part_2, sched.1, sched.0);
-        println!("{} % {} = {}", part_2, sched.1, part_2 % sched.1);
-    }
+    // for sched in schedules {
+    //     println!("\nExpected/Actual");
+    //     println!("{} % {} = {}", part_2, sched.1, sched.0);
+    //     println!("{} % {} = {}", part_2, sched.1, part_2 % sched.1);
+    // }
 
     Ok(())
 }
@@ -49,7 +49,7 @@ pub fn part_2_naive(schedules: &[(usize, usize)], jump: u64) -> u64 {
     let mut iter: u64 = 0;
     loop {
         // always advance by largest size-ish
-        iter = iter + 1;
+        iter += 1;
         let time: u64 = iter * jump;
 
         // find cloest number and see if it fits
@@ -76,12 +76,13 @@ pub fn part_2_chinese_remainder_theory(schedules: &[(usize, usize)]) -> usize {
 
         let mut inv: usize = 0;
         for i in 0..*num {  // O(n) search,
+
             if (pp * i) % num == 1 {
                 inv = i;
                 break;
             }
         }
-        sum = sum + (rem * pp * inv);
+        sum += rem * pp * inv;
     }
 
     sum % product

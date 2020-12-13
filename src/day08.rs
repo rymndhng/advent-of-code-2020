@@ -43,19 +43,19 @@ fn part_1(commands: &[Cmd]) -> Result<i32, (String, i32)> {
 
         match cmd {
             Cmd::Acc(arg) => {
-                acc = acc + arg;
-                next_instruction = next_instruction + 1;
+                acc += arg;
+                next_instruction += 1;
             }
             Cmd::Nop(_) => {
-                next_instruction = next_instruction + 1;
+                next_instruction += 1;
             }
             Cmd::Jmp(arg) => {
-                next_instruction = next_instruction + arg;
+                next_instruction += arg;
             }
         }
     }
 
-    return Ok(acc);
+    Ok(acc)
 }
 
 fn part_2(commands: &[Cmd]) -> Result<i32, &str> {
@@ -78,7 +78,7 @@ fn part_2(commands: &[Cmd]) -> Result<i32, &str> {
         }
     }
 
-    return Err("Could not fix corrupted commands");
+    Err("Could not fix corrupted commands")
 }
 
 impl FromStr for Cmd {

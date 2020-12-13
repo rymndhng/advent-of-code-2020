@@ -12,7 +12,7 @@ pub fn main() -> std::io::Result<()> {
         .map(|s| s.unwrap().parse::<u64>().unwrap())
         .collect::<Vec<_>>();
 
-    joltage.sort();
+    joltage.sort_unstable();
 
     joltage.insert(0, 0);
     joltage.push(joltage.last().unwrap() + 3);
@@ -25,9 +25,9 @@ pub fn main() -> std::io::Result<()> {
     joltage
         .windows(2)
         .for_each(|a| match a[1] - a[0] {
-            1 => ones = ones + 1,
-            2 => twos = twos + 1,
-            3 => threes = threes + 1,
+            1 => ones += 1,
+            2 => twos += 1,
+            3 => threes += 1,
             _ => panic!("unexpected input")
         });
 
@@ -57,7 +57,7 @@ pub fn main() -> std::io::Result<()> {
         .map(|s| s.unwrap().parse::<usize>().unwrap())
         .collect::<Vec<_>>();
 
-    joltage.sort();
+    joltage.sort_unstable();
 
     joltage.insert(0, 0);
     joltage.push(joltage.last().unwrap() + 3);
@@ -106,7 +106,7 @@ pub fn part_2_vec(joltages: &[u64]) -> u64 {
             }
         }
     }
-    return paths_count[joltages.len()-1];
+    paths_count[joltages.len()-1]
 }
 
 

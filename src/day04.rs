@@ -18,17 +18,17 @@ struct Passport {
 // TODO: how to turn this into a FnOnce
 fn between(x: i32, min: i32, max: i32) -> bool { min <= x && x <= max }
 
-fn valid_height(s: &String) -> bool {
+fn valid_height(s: &str) -> bool {
     let mut chars = s.chars().peekable();
 
     let mut height = 0;
 
-    loop {
-        match chars.peek() {
-            Some(c) => if c.is_digit(10) { height = height * 10 + c.to_digit(10).unwrap()} else { break },
-            None => break
+    while let Some(c) = chars.peek() {
+        if c.is_digit(10) {
+            height = height * 10 + c.to_digit(10).unwrap();
+        } else {
+            break;
         }
-        chars.next();
     }
 
     let unit: String = chars.by_ref().collect();
@@ -42,8 +42,8 @@ fn valid_height(s: &String) -> bool {
     }
 }
 
-fn valid_color(s: &String) -> bool {
-    if s.len() != 7 || !s.starts_with("#") {
+fn valid_color(s: &str) -> bool {
+    if s.len() != 7 || !s.starts_with('#') {
         return false;
     }
 
@@ -56,7 +56,7 @@ fn valid_color(s: &String) -> bool {
         }
 
     }
-    return true;
+    true
 }
 
 // TODO: hand-rolling a parser is very painful
@@ -126,7 +126,7 @@ pub fn main () -> std::io::Result<()> {
                 // println!("collecting! {}", x);
                 acc.push(' ');
                 acc.push_str(&x);
-                return Some(None);
+                Some(None)
             }
         }).filter_map(|x| match x {
             Some(x) => match parse_line(x) {
