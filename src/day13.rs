@@ -2,6 +2,7 @@ use std::io::prelude::*;
 use std::io::BufReader;
 use std::fs::File;
 
+#[allow(dead_code)]
 pub fn main() -> std::io::Result<()> {
     let file = File::open("input/13.txt")?;
     let reader = BufReader::new(file);

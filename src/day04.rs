@@ -29,6 +29,7 @@ fn valid_height(s: &str) -> bool {
         } else {
             break;
         }
+        chars.next();
     }
 
     let unit: String = chars.by_ref().collect();
