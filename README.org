@@ -110,6 +110,17 @@ imperative: 23.940732729s
 functional: 25.577907276s
 #+end_src
 
+** Day 14
+Very challenging for me (not good at bitmasking)
+
+Things I liked about Rust:
+- strictness about operations on signed and unsigned types
+- parsing is nice
+- Language makes it easy to work with different "levels" of absraction
+  - bit-masking
+  - HashMap for "sparse memory"
+
+
 * Footnotes
 
 [fn:2] https://notes.iveselov.info/programming/time_it-a-case-study-in-rust-macros
