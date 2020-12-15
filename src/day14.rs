@@ -5,6 +5,7 @@ use std::io::BufReader;
 use std::num;
 use std::str::FromStr;
 
+#[allow(dead_code)]
 pub fn main() -> std::io::Result<()> {
     let file = File::open("input/14.txt")?;
     let reader = BufReader::new(file);
