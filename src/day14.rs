@@ -35,10 +35,7 @@ fn part_2(cmds: &[Cmd]) -> u64 {
 
 fn part_1(cmds: &[Cmd]) -> u64 {
     let mut mask = BitMask {ones: !0b0, zeros: 0};
-    let mut registers = Vec::with_capacity(65536);
-    for _ in 1..65536 {
-        registers.push(0);
-    }
+    let mut registers = vec![0;65536];
 
     for cmd in cmds {
         match cmd {
@@ -117,8 +114,8 @@ impl FromStr for BitMask {
         let mut zeros = 0;
 
         for c in s.chars() {
-            ones = ones << 1;
-            zeros = zeros << 1;
+            ones <<= 1;
+            zeros <<= 1;
             if c == '1' {
                 ones += 1;
             } else if c == '0' {
@@ -162,7 +159,7 @@ impl FromStr for Cmd {
             return Ok(Cmd::Mem(idx, value));
         }
 
-        return Err(ParseError::InvalidSyntax);
+        Err(ParseError::InvalidSyntax)
     }
 }
 

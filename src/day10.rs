@@ -98,6 +98,7 @@ pub fn part_2_vec(joltages: &[u64]) -> u64 {
 
     for (idx, joltage) in joltages.iter().enumerate() {
         let current_paths = paths_count[idx];
+        #[allow(clippy::needless_range_loop)]
         for next_index in idx+1 .. idx+4 {
             if let Some(n) = joltages.get(next_index) {
                 if n - joltage <= 3 {

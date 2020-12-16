@@ -13,7 +13,7 @@ fn parse_line(s: String) -> Vec<bool> {
     s.chars().map(|c| c == '#').collect()
 }
 
-fn count_trees(grid: &ForestGrid, slope: &Slope) -> u32 {
+fn count_trees(grid: &[Vec<bool>], slope: &Slope) -> u32 {
     let mut count: u32 = 0;
 
     let mut row_n = 0;

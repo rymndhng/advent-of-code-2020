@@ -24,9 +24,14 @@ macro_rules! time_it {
     }
 }
 
+
 #[derive(Debug)]
 pub enum ParseError {
     EOF,
+
+    #[allow(dead_code)]
     InvalidSyntax(String),
-    Parse(num::ParseIntError, String)
+
+    #[allow(dead_code)]
+    InvalidInt(num::ParseIntError)
 }
