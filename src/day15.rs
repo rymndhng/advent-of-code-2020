@@ -1,5 +1,6 @@
 use std::collections::HashMap;
 
+#[allow(dead_code)]
 pub fn main() -> std::io::Result<()> {
     let input = vec!(0,20,7,16,1,18,15);
     dbg!(part_1(&input, 2020));

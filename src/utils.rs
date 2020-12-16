@@ -1,3 +1,5 @@
+use std::num;
+
 #[macro_export]
 macro_rules! hashset(
     ($($value:expr),+) => {
@@ -20,4 +22,11 @@ macro_rules! time_it {
         )*
             println!("{}: {:?}", $context, timer.elapsed());
     }
+}
+
+#[derive(Debug)]
+pub enum ParseError {
+    EOF,
+    InvalidSyntax(String),
+    Parse(num::ParseIntError, String)
 }
