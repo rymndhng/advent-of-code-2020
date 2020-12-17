@@ -9,6 +9,7 @@ use std::io::BufReader;
 use std::iter::FromIterator;
 use std::str::FromStr;
 
+#[allow(dead_code)]
 pub fn main() -> std::io::Result<()> {
     let file = File::open("input/16.txt")?;
     let reader = BufReader::new(file);
