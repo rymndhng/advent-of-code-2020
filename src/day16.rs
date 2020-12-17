@@ -100,33 +100,24 @@ fn part_2_fun(rules: &[Rule], tickets: &[Vec<u64>], your_ticket: &[u64]) -> u64 
     }
 
     // Calculate rule appearances
-    let mut rule_appears_in: Vec<Vec<Rule>> = Vec::new();
-    for col in cols {
-        let mut appears_in: Vec<Rule> = Vec::new();
-        for rule in rules {
-            let mut valid = true;
-            for v in col.iter() {
-                if !rule.valid(*v) {
-                    valid = false;
-                    break;
-                }
-            }
-            if valid {
-                appears_in.push(rule.clone());
-            }
-        }
-        rule_appears_in.push(appears_in);
-    }
+    let mut rule_appears_in = cols
+        .iter()
+        .map(|col| {
+            rules
+                .iter()
+                .filter(|rule| col.iter().find(|&v| !rule.valid(*v)).is_some())
+                .collect::<Vec<_>>()
+        })
+        .enumerate()
+        .collect::<Vec<_>>();
+    rule_appears_in.sort_unstable_by_key(|(_, v)| v.len());
 
     // Produce Results
     let mut result: HashMap<String, usize> = HashMap::new();
     let mut seen: HashSet<&Rule> = HashSet::new();
-    let mut rule_appears_in = rule_appears_in.iter().enumerate().collect::<Vec<_>>();
-    rule_appears_in.sort_unstable_by_key(|(_, v)| v.len());
-
     for (col, rules) in rule_appears_in {
         for rule in rules {
-            if !seen.contains(&rule) {
+            if !seen.contains(rule) {
                 result.insert(rule.name.to_string(), col);
                 seen.insert(&rule);
             }

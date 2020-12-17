@@ -120,6 +120,14 @@ Things I liked about Rust:
   - bit-masking
   - HashMap for "sparse memory"
 
+** Day 15
+Mostly algorithm design
+
+** Day 16
+Practised:
+- using Traits FromStr and std::fmt::Display
+- using ? for error handling
+- using itertools to generate tuples
 
 * Footnotes
 
